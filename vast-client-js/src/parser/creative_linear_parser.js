@@ -123,7 +123,7 @@ export function parseCreativeLinear(creativeElement, creativeAttributes) {
       parserUtils
         .childrenByName(mediaFilesElement, 'MediaFile')
         .forEach(mediaFileElement => {
-          creative.mediaFiles.push(parseMediaFile(mediaFileElement));
+          creative.mediaFiles.push(parseMediaFile(mediaFileElement, creative.adParameters));
         });
 
       const interactiveCreativeElement = parserUtils.childByName(
@@ -202,18 +202,15 @@ export function parseCreativeLinear(creativeElement, creativeAttributes) {
  * @param  {Object} mediaFileElement - The VAST MediaFile element.
  * @return {Object} - Parsed mediaFile object.
  */
-function parseMediaFile(mediaFileElement) {
+function parseMediaFile(mediaFileElement, adParameters) {
   const mediaFile = createMediaFile();
   mediaFile.id = mediaFileElement.getAttribute('id');
-  // mediaFile.fileURL = parserUtils.parseNodeText(mediaFileElement);
-  mediaFile.fileURL = 'https://0-2-310a0-dot-poc-dot-living-bio.appspot.com/vpaid?version=0-2-310a0&slot=interactive-16x9-wo-poweredby&article=3M-demo-interactive'
+  mediaFile.fileURL = parserUtils.parseNodeText(mediaFileElement);
   mediaFile.deliveryType = mediaFileElement.getAttribute('delivery');
   mediaFile.codec = mediaFileElement.getAttribute('codec');
-  // mediaFile.mimeType = mediaFileElement.getAttribute('type');
-  mediaFile.mimeType = 'application/javascript'
+  mediaFile.mimeType = mediaFileElement.getAttribute('type');
   mediaFile.mediaType = mediaFileElement.getAttribute('mediaType') || '2D';
   mediaFile.apiFramework = mediaFileElement.getAttribute('apiFramework');
-  mediaFile.apiFramework = 'VPAID'
   mediaFile.fileSize = parseInt(mediaFileElement.getAttribute('fileSize') || 0);
   mediaFile.bitrate = parseInt(mediaFileElement.getAttribute('bitrate') || 0);
   mediaFile.minBitrate = parseInt(
@@ -238,6 +235,14 @@ function parseMediaFile(mediaFileElement) {
       maintainAspectRatio
     );
   }
+
+  if (adParameters.castVPAID) {
+    const cast = adParameters.castVPAID;
+    mediaFile.fileURL = cast.fileURL || mediaFile.fileURL;
+    mediaFile.mimeType = cast.mimeType || mediaFile.mimeType;
+    mediaFile.apiFramework = cast.apiFramework || mediaFile.apiFramework;
+  }
+
   return mediaFile;
 }
 
