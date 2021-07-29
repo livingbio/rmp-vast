@@ -236,12 +236,15 @@ function parseMediaFile(mediaFileElement, adParameters) {
     );
   }
 
-  if (adParameters.castVPAID) {
-    const cast = adParameters.castVPAID;
-    mediaFile.fileURL = cast.fileURL || mediaFile.fileURL;
-    mediaFile.mimeType = cast.mimeType || mediaFile.mimeType;
-    mediaFile.apiFramework = cast.apiFramework || mediaFile.apiFramework;
-  }
+  try {
+    adParameters = JSON.parse(adParameters)
+    if (adParameters.castVPAID) {
+      const cast = adParameters.castVPAID;
+      mediaFile.fileURL = cast.fileURL || mediaFile.fileURL;
+      mediaFile.mimeType = cast.mimeType || mediaFile.mimeType;
+      mediaFile.apiFramework = cast.apiFramework || mediaFile.apiFramework;
+    }
+  } catch (e) {}
 
   return mediaFile;
 }
