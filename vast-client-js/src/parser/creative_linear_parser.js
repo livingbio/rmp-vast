@@ -205,12 +205,15 @@ export function parseCreativeLinear(creativeElement, creativeAttributes) {
 function parseMediaFile(mediaFileElement) {
   const mediaFile = createMediaFile();
   mediaFile.id = mediaFileElement.getAttribute('id');
-  mediaFile.fileURL = parserUtils.parseNodeText(mediaFileElement);
+  // mediaFile.fileURL = parserUtils.parseNodeText(mediaFileElement);
+  mediaFile.fileURL = 'https://0-2-310a0-dot-poc-dot-living-bio.appspot.com/vpaid?version=0-2-310a0&slot=interactive-16x9-wo-poweredby&article=3M-demo-interactive'
   mediaFile.deliveryType = mediaFileElement.getAttribute('delivery');
   mediaFile.codec = mediaFileElement.getAttribute('codec');
-  mediaFile.mimeType = mediaFileElement.getAttribute('type');
+  // mediaFile.mimeType = mediaFileElement.getAttribute('type');
+  mediaFile.mimeType = 'application/javascript'
   mediaFile.mediaType = mediaFileElement.getAttribute('mediaType') || '2D';
   mediaFile.apiFramework = mediaFileElement.getAttribute('apiFramework');
+  mediaFile.apiFramework = 'VPAID'
   mediaFile.fileSize = parseInt(mediaFileElement.getAttribute('fileSize') || 0);
   mediaFile.bitrate = parseInt(mediaFileElement.getAttribute('bitrate') || 0);
   mediaFile.minBitrate = parseInt(
